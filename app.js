@@ -6,9 +6,10 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+// 注册
 const registerRouter = require('./routes/register');
-
-// const loginRouter = require('./routes/login');
+// 登陆
+const loginRouter = require('./routes/login');
 
 
 var app = express();
@@ -25,9 +26,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// 注册
 app.use('/register',registerRouter)
-
-// app.use('/login',loginRouter)
+// 登陆
+app.use('/login',loginRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

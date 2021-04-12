@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const mysqlRequest = require('../mysql/mysql')
+const mysqlRequest = require('../util/mysql')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
