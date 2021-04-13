@@ -21,32 +21,16 @@ router.post('/', async function(req, res, next) {
     res.send(JSON.parse(JSON.stringify(data)))
     return
   }
-  // 第四步 判断密码是否正确
-  let sql = `select password from user where ${nameType} = '${name}'`
-  const result = await mysqlRequest(sql)
-  if( result.length != 0 && result[0].password == password){
-    // 账号密码都对应，进行登陆传值
-    let updateSql = `update user set login = 'true' where ${nameType} = '${name}'`
-    await mysqlRequest(updateSql)
-    let selectUser = `select * from user where ${nameType} = '${name}'`
-    const user = await mysqlRequest(selectUser)
-    const data = {
-        data:{
-            user: user[0],
-        },
-        code: 200
-    }
-    res.send(JSON.parse(JSON.stringify(data)))
-    return
-  }else{
-    // 账号和密码不匹配，返回提示信息
-    const data = {
-      data:{
-          msg
-      }
-    }
-    res.send(JSON.parse(JSON.stringify(data)))
+  // 第四步 修改密码
+  let sql = `update user set password = '${password}' where ${nameType} = '${name}'`
+  await mysqlRequest(sql)
+  const data = {
+    data:{
+        msg: '密码修改成功'
+    },
+    code: 200
   }
+  res.send(JSON.parse(JSON.stringify(data)))
 });
 
 function checkType(name){
@@ -55,17 +39,10 @@ function checkType(name){
       nameType: 'phoneNumber',
       msg: '手机号或者密码错误'
     }
-  }
-  else if(emailReg.test(name)){ // 邮箱登陆
+  }else{ // 邮箱登陆
     return {
       nameType: 'email',
       msg: '邮箱或者密码错误'
-    }
-  }
-  else{
-    return {
-      nameType: 'nick',
-      msg: 'soup号或者密码错误'
     }
   }
 }

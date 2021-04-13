@@ -10,6 +10,7 @@ router.post('/', async function(req, res, next) {
   let sql
   let result // 数据库查询结果
   if(phoneReg.test(account)){ // 手机注册
+    // 判断手机号是否注册
     sql = `select phoneNumber from user where phoneNumber = '${account}' `
     result =  await mysqlRequest(sql)
     if(result.length > 0){
@@ -21,6 +22,7 @@ router.post('/', async function(req, res, next) {
         res.send(JSON.parse(JSON.stringify(data)))
         return
     }else{
+        // 手机号未注册
         const id = Date.now()
         sql = `insert into user (id,nick,phoneNumber,password,login,bgImg,picUrl) values (${id},'${nick}','${account}','${password}','true','${bgImg}','${picUrl}')`
         await mysqlRequest(sql)
@@ -36,6 +38,7 @@ router.post('/', async function(req, res, next) {
         return
     }
   }else{ // 邮箱注册
+    // 判断邮箱是否注册
     sql = `select email from user where email = '${account}' `
     result =  await mysqlRequest(sql)
     if(result.length > 0){
@@ -47,6 +50,7 @@ router.post('/', async function(req, res, next) {
         res.send(JSON.parse(JSON.stringify(data)))
         return
     }else{
+        // 邮箱暂未注册
         const id = Date.now()
         sql = `insert into user (id,nick,email,password,login,bgImg,picUrl) values (${id},'${nick}','${account}','${password}','true','${bgImg}','${picUrl}')`
         await mysqlRequest(sql)

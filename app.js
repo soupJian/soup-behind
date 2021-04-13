@@ -10,6 +10,8 @@ var usersRouter = require('./routes/users');
 const registerRouter = require('./routes/register');
 // 登陆
 const loginRouter = require('./routes/login');
+// 忘记密码
+const forgetRouter = require('./routes/forget')
 
 
 var app = express();
@@ -30,6 +32,8 @@ app.use('/users', usersRouter);
 app.use('/register',registerRouter)
 // 登陆
 app.use('/login',loginRouter)
+// 忘记密码
+app.use('/forget',forgetRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
