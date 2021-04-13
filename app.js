@@ -12,6 +12,8 @@ const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
 // 忘记密码
 const forgetRouter = require('./routes/forget')
+// 发现
+const findRouter = require('./routes/find')
 
 
 var app = express();
@@ -34,6 +36,9 @@ app.use('/register',registerRouter)
 app.use('/login',loginRouter)
 // 忘记密码
 app.use('/forget',forgetRouter)
+// 发现
+app.use('/find',findRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
