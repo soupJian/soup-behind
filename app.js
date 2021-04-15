@@ -14,7 +14,12 @@ const loginRouter = require('./routes/login');
 const forgetRouter = require('./routes/forget')
 // 发现
 const findRouter = require('./routes/find')
-
+// search 
+const searchRouter = require('./routes/search')
+// 好友
+const friendRouter = require('./routes/friends')
+// 创建群
+const groupRouter = require('./routes/group')
 
 var app = express();
 
@@ -38,7 +43,12 @@ app.use('/login',loginRouter)
 app.use('/forget',forgetRouter)
 // 发现
 app.use('/find',findRouter)
-
+// search
+app.use('/search',searchRouter)
+// friends
+app.use('/friends',friendRouter)
+// 创建群组
+app.use('/group',groupRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
