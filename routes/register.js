@@ -24,7 +24,8 @@ router.post('/', async function(req, res, next) {
     }else{
         // 手机号未注册
         const id = Date.now()
-        sql = `insert into user (id,nick,phoneNumber,password,login,bgImg,picUrl) values (${id},'${nick}','${account}','${password}','true','${bgImg}','${picUrl}')`
+        sql = `insert into user (id,nick,phoneNumber,password,login,bgImg,picUrl,email,signature,address,age) values 
+                                (${id},'${nick}','${account}','${password}','true','${bgImg}','${picUrl}','','','','')`
         await mysqlRequest(sql)
         let selectUser = `select * from user where id = ${id}`
         const user = await mysqlRequest(selectUser)
@@ -52,7 +53,8 @@ router.post('/', async function(req, res, next) {
     }else{
         // 邮箱暂未注册
         const id = Date.now()
-        sql = `insert into user (id,nick,email,password,login,bgImg,picUrl) values (${id},'${nick}','${account}','${password}','true','${bgImg}','${picUrl}')`
+        sql = `insert into user (id,nick,email,password,login,bgImg,picUrl,phoneNumber,signature,address,age) values 
+                                (${id},'${nick}','${account}','${password}','true','${bgImg}','${picUrl}','','','','')`
         await mysqlRequest(sql)
         let selectUser = `select * from user where id = ${id}`
         const user = await mysqlRequest(selectUser)

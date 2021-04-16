@@ -20,6 +20,8 @@ const searchRouter = require('./routes/search')
 const friendRouter = require('./routes/friends')
 // 创建群
 const groupRouter = require('./routes/group')
+// 修改用户信息
+const changeinfoRouter = require('./routes/changeinfo')
 
 var app = express();
 
@@ -49,6 +51,8 @@ app.use('/search',searchRouter)
 app.use('/friends',friendRouter)
 // 创建群组
 app.use('/group',groupRouter)
+// 修改信息
+app.use('/changeinfo',changeinfoRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
