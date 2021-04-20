@@ -41,7 +41,7 @@ router.post('/', async function(req, res, next) {
     }
     // 如果修改邮箱 需要判断邮箱是否已经注册
     if(key == 'email'){
-        sql = `select email from user where email = ${user.email}`
+        sql = `select email from user where email = '${user.email}'`
         const result = await mysqlRequest(sql)
         if(result.length > 0){
             const data = {

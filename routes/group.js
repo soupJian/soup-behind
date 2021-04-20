@@ -53,15 +53,35 @@ router.post('/create', async function(req, res, next) {
   })
   // 网络图片地址
   const picUrl = `http://www.soupjian.work:3100/group/${user.id}/${id}/${nick}/-----soupCoover======.jpg`
-  // 群员
-  const list = JSON.stringify(user)
+
   let sql
-  sql = `insert into usergroup (id,nick,list,picUrl,description) values (${id},'${nick}','${list}','${picUrl}','${description}')`
-  // 数据入库
+  // 数据入库 所有群
+  sql = `insert into usergroup (id,nick,picUrl,description) values (${id},'${nick}','${picUrl}','${description}')`
   await mysqlRequest(sql)
-  sql = `insert into creategroup (id,nick,picUrl) values (${id},'${nick}','${picUrl}')`
+  // 群主信息为第一条数据
+  const list = JSON.stringify([{
+    "id":user.id,
+    "nick": user.nick,
+    "picUrl": user.picUrl
+  }])
+  sql = `insert into grouplist (id,list) values (${id},'${list}')`
   await mysqlRequest(sql)
+  // 用户创建的多个群
+  sql = `select list from creategroup where id = ${user.id}`
+  const grouplist = await mysqlRequest(sql)
+  grouplist.list.push({
+    "id": id,
+    "nick": nick,
+    "picUrl": picUrl,
+    "description": description
+  })
+  const json = JSON.stringify(grouplist.list)
+  sql = `update creategroup set list = ${json} where id = ${user.id}  )`
+  await mysqlRequest(sql)
+  sql = `select list from creategroup where id = ${user.id}`
+  const result = await mysqlRequest(sql)
   const data = {
+    creategroup: result,
     msg: `群聊${nick}创建成功`,
     code: 200
   }

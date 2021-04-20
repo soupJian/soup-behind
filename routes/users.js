@@ -3,10 +3,11 @@ var router = express.Router();
 const mysqlRequest = require('../util/mysql')
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  const sql = 'select * from user'
-  mysqlRequest(sql)
-  res.send('respond with a resource');
+router.get('/', async function(req, res, next) {
+  const id = req.query.id
+  const sql = `select * from user where id = ${id}`
+  const result = await mysqlRequest(sql)
+  res.send(result[0]);
 });
 
 module.exports = router;

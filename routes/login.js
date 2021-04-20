@@ -29,9 +29,9 @@ router.post('/', async function(req, res, next) {
     let updateSql = `update user set login = 'true' where ${nameType} = '${name}'`
     await mysqlRequest(updateSql)
     let usersql = `select * from user where ${nameType} = '${name}'`
-    let addgroupsql = `select * from addgroup`
-    let creategroupsql = 'select * from creategroup'
     const user = await mysqlRequest(usersql)
+    let addgroupsql = `select list from addgroup where id = ${user[0].id}`
+    let creategroupsql = `select list from creategroup where id = ${user[0].id}`
     const addgroup = await mysqlRequest(addgroupsql)
     const creategroup = await mysqlRequest(creategroupsql)
     const data = {
