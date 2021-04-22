@@ -8,7 +8,7 @@ router.post('/', async function(req, res, next) {
   sql = `select * from friends where id = ${user.id}`
   const result = await mysqlRequest(sql)
   let array = []
-  if(result[0].list){
+  if(result.length > 0 && result[0].list){
     array = JSON.parse(result[0].list)
   }
   array.push({

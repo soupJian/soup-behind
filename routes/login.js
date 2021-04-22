@@ -37,8 +37,8 @@ router.post('/', async function(req, res, next) {
     const data = {
         data:{
             user: user[0],
-            addgroup,
-            creategroup,
+            addgroup: addgroup[0].list,
+            creategroup: creategroup[0].list,
         },
         code: 200
     }

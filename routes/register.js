@@ -31,6 +31,7 @@ router.post('/', async function(req, res, next) {
         data = {
             data:{
                 user: user[0],
+                friends: [user[0]]
             },
             code: 200
         }
@@ -54,18 +55,22 @@ router.post('/', async function(req, res, next) {
         data = {
             data:{
                 user: user[0],
+                friends: [user[0]]
             },
             code: 200
         }
     }
   }
 //   注册时候创建对应好友列表
-  sql = `insert into friends (id,list) values (${id},'[]')`
+  const arr = []
+  arr[0] = data.data.user
+  const arrStr = JSON.stringify(arr)
+  sql = `insert into friends (id,list) values (${id},'${arrStr}')`
   await mysqlRequest(sql)
 //  创建 创建的群组占位
-  sql = `insert into creategroup (id) values (${id},'[])`
+  sql = `insert into creategroup (id,list) values (${id},'')`
   await mysqlRequest(sql)
-  sql = `insert into addgroup (id) values (${id},'[]')`
+  sql = `insert into addgroup (id,list) values (${id},'')`
   await mysqlRequest(sql)
   res.send(JSON.parse(JSON.stringify(data)))
 });
