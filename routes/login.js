@@ -32,11 +32,14 @@ router.post('/', async function(req, res, next) {
     const user = await mysqlRequest(usersql)
     let addgroupsql = `select list from addgroup where id = ${user[0].id}`
     let creategroupsql = `select list from creategroup where id = ${user[0].id}`
+    let friendsql = `select list from friends where id = ${user[0].id}`
+    const friend = await mysqlRequest(friendsql)
     const addgroup = await mysqlRequest(addgroupsql)
     const creategroup = await mysqlRequest(creategroupsql)
     const data = {
         data:{
             user: user[0],
+            friends: JSON.parse(friend[0].list),
             addgroup: addgroup[0].list,
             creategroup: creategroup[0].list,
         },
