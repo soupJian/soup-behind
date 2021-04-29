@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
                 {
                     id: "cloud-1",
                     name: '好友动态',
-                    imgUrl: 'http://www.soupjian.work:3100/defaultImg/cloud.jpg'
+                    imgUrl: 'http://175.24.116.96:3100/defaultImg/cloud.jpg'
                 }
             ],
           },
@@ -21,17 +21,17 @@ router.get('/', function(req, res, next) {
                 {
                   id: "workspace-1",
                   name: 'vue2.x网易云音乐项目',
-                  imgUrl: 'http://www.soupjian.work:3100/defaultImg/vue.jpg'
+                  imgUrl: 'http://175.24.116.96:3100/defaultImg/vue.jpg'
                 },
                 {
                   id: "workspace-2",
                   name: 'react-umi-ts-antd web端网易云',
-                  imgUrl: 'http://www.soupjian.work:3100/defaultImg/react.jpg'
+                  imgUrl: 'http://175.24.116.96:3100/defaultImg/react.jpg'
                 },
                 {
                   id: "workspace-3",
                   name: 'vue3.0之去哪儿网',
-                  imgUrl: 'http://www.soupjian.work:3100/defaultImg/travel.jpg'
+                  imgUrl: 'http://175.24.116.96:3100/defaultImg/travel.jpg'
                 }
             ],
           },
@@ -41,12 +41,12 @@ router.get('/', function(req, res, next) {
                 {
                     id: 'code-1',
                     name: "github",
-                    imgUrl: 'http://www.soupjian.work:3100/defaultImg/github.jpg'
+                    imgUrl: 'http://175.24.116.96:3100/defaultImg/github.jpg'
                 },
                 {
                     id: 'code-2',
                     name: "gitee",
-                    imgUrl: 'http://www.soupjian.work:3100/defaultImg/gitee.jpg'
+                    imgUrl: 'http://175.24.116.96:3100/defaultImg/gitee.jpg'
                 }
             ],
           },
@@ -56,12 +56,12 @@ router.get('/', function(req, res, next) {
                 {
                   id: 'contact-1',
                   name: "QQ",
-                  imgUrl: 'http://www.soupjian.work:3100/defaultImg/qq.jpg'
+                  imgUrl: 'http://175.24.116.96:3100/defaultImg/qq.jpg'
                 },
                 {
                   id: 'contact-2',
                   name: "微信",
-                  imgUrl: 'http://www.soupjian.work:3100/defaultImg/wx.jpg'
+                  imgUrl: 'http://175.24.116.96:3100/defaultImg/wx.jpg'
                 }
             ]
           }

@@ -64,7 +64,7 @@ router.post('/', async function(req, res, next) {
             console.log('保存图片成功')
         }
     })
-    let picUrlNetwork = `http://www.soupjian.work:3100/user/${user.id}/-----soupCover======/picUrl.jpg`
+    let picUrlNetwork = `http://175.24.116.96:3100/user/${user.id}/-----soupCover======/picUrl.jpg`
     let sql = `update user set picUrl = '${picUrlNetwork}' where id = ${user.id}`
     await mysqlRequest(sql)
   }

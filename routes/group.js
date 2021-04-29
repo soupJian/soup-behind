@@ -52,7 +52,7 @@ router.post('/create', async function(req, res, next) {
       }
   })
   // 网络图片地址
-  const picUrl = `http://www.soupjian.work:3100/group/${user.id}/${id}/${nick}/-----soupCoover======.jpg`
+  const picUrl = `http://175.24.116.96:3100/group/${user.id}/${id}/${nick}/-----soupCoover======.jpg`
 
   let sql
   // 数据入库 所有群
