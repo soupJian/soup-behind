@@ -26,8 +26,6 @@ router.post('/', async function(req, res, next) {
   const result = await mysqlRequest(sql)
   if( result.length != 0 && result[0].password == password){
     // 账号密码都对应，进行登陆传值
-    let updateSql = `update user set login = 'true' where ${nameType} = '${name}'`
-    await mysqlRequest(updateSql)
     let usersql = `select * from user where ${nameType} = '${name}'`
     const user = await mysqlRequest(usersql)
     let addgroupsql = `select list from addgroup where id = ${user[0].id}`

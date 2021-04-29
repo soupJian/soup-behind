@@ -22,6 +22,8 @@ const friendRouter = require('./routes/friends')
 const groupRouter = require('./routes/group')
 // 修改用户信息
 const changeinfoRouter = require('./routes/changeinfo')
+// 聊天记录
+const chatRouter = require('./routes/chat')
 
 var app = express();
 
@@ -53,6 +55,8 @@ app.use('/friends',friendRouter)
 app.use('/group',groupRouter)
 // 修改信息
 app.use('/changeinfo',changeinfoRouter)
+// 聊天记录
+app.use('/chat',chatRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
