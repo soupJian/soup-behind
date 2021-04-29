@@ -21,7 +21,6 @@ module.exports = (io)=>{
             let updateSql = `update user set login = 'false' where id = ${id}`
             await mysqlRequest(updateSql)
             users[id] = null
-            console.log(users)
         })
     })
     // 用户关掉连接，下线了

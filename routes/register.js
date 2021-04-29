@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-// var moment = require('moment');
+var fs = require('fs');
 const mysqlRequest = require('../util/mysql')
-const {picUrl,bgImg,phoneReg} = require('../util/type')
+const {phoneReg} = require('../util/type')
 
 /* GET users listing. */
 router.post('/', async function(req, res, next) {
@@ -11,6 +11,8 @@ router.post('/', async function(req, res, next) {
   let sql
   let data
   let result // 数据库查询结果
+  const picUrl = `http://175.24.116.96:3100/user/${id}/-----soupCover======/picUrl.jpg`
+  const bgImg = `http://175.24.116.96:3100/user/${id}/-----soupCover======/bgImg.jpg`
   if(phoneReg.test(account)){ // 手机注册
     // 判断手机号是否注册
     sql = `select phoneNumber from user where phoneNumber = '${account}' `
@@ -61,13 +63,32 @@ router.post('/', async function(req, res, next) {
         }
     }
   }
-//   注册时候创建对应好友列表
+  const userPath = `public/user/${id}` // 用户 id 文件夹
+  const imgPath = `public/user/${id}/-----soupCover======`
+  //  1.注册时候创建用户文件夹
+  fs.mkdir(userPath,(err)=>{
+    if(err){
+        console.log(err);
+    }
+  })
+  fs.mkdir(imgPath,(err)=>{
+    if(err){
+        console.log(err);
+    }
+    fs.copyFile('public/defaultImg/picUrl.jpg',`public/user/${id}/-----soupCover======/picUrl.jpg`,function(err){
+        if(err) console.log(err)
+    })
+    fs.copyFile('public/defaultImg/bgImg.jpg',`public/user/${id}/-----soupCover======/bgImg.jpg`,function(err){
+        if(err) console.log(err)
+    })
+  })
+// 注册时候创建对应好友列表
   const arr = []
   arr[0] = data.data.user
   const arrStr = JSON.stringify(arr)
   sql = `insert into friends (id,list) values (${id},'${arrStr}')`
   await mysqlRequest(sql)
-//  创建 创建的群组占位
+// 创建 创建的群组占位
   sql = `insert into creategroup (id,list) values (${id},'')`
   await mysqlRequest(sql)
   sql = `insert into addgroup (id,list) values (${id},'')`
