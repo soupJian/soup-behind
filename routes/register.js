@@ -23,6 +23,8 @@ router.post('/', async function(req, res, next) {
                 msg: '手机号已注册'
             }
         }
+        res.send(JSON.stringify(data))
+        return
     }else{
         // 手机号未注册
         sql = `insert into user (id,nick,phoneNumber,password,bgImg,picUrl,email,signature,address,age,login) values 
@@ -52,11 +54,13 @@ router.post('/', async function(req, res, next) {
                 msg: '邮箱已注册'
             }
         }
+        res.send(JSON.stringify(data))
+        return
     }else{
         sql = `insert into user (id,nick,email,password,bgImg,picUrl,phoneNumber,signature,address,age,login) values 
                                 (${id},'${nick}','${account}','${password}','${bgImg}','${picUrl}','','','','','false')`
         await mysqlRequest(sql)
-        let selectUser = `select select id,login,nick,phoneNumber,email,bgImg,picUrl,signature,address,sex,age from user where id = ${id}`
+        let selectUser = `select id,login,nick,phoneNumber,email,bgImg,picUrl,signature,address,sex,age from user where id = ${id}`
         const user = await mysqlRequest(selectUser)
         data = {
             data:{
@@ -92,6 +96,7 @@ router.post('/', async function(req, res, next) {
   })
 // 注册时候创建对应好友列表
   const arr = []
+  console.log(data)
   arr[0] = {
       id: data.data.user.id,
       nick: data.data.user.nick,

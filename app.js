@@ -5,7 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
+// 个人中心
 var usersRouter = require('./routes/users');
+// 校验用户名
+var checkNickRouter = require('./routes/checkNick');
 // 注册
 const registerRouter = require('./routes/register');
 // 登陆
@@ -39,6 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// 校验用户名
+app.use('/checkNick',checkNickRouter)
 // 注册
 app.use('/register',registerRouter)
 // 登陆
