@@ -68,7 +68,7 @@ router.post('/', async function(req, res, next) {
     let sql = `update user set picUrl = '${picUrlNetwork}' where id = ${user.id}`
     await mysqlRequest(sql)
   }
-  let sql = `select * from user where id = ${user.id}`
+  let sql = `select id,login,nick,phoneNumber,email,bgImg,picUrl,signature,address,sex,age from user where id = ${user.id}`
   const result = await mysqlRequest(sql)
   const datainfo = {
       user:result[0],

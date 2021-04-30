@@ -28,12 +28,16 @@ router.post('/', async function(req, res, next) {
         sql = `insert into user (id,nick,phoneNumber,password,bgImg,picUrl,email,signature,address,age,login) values 
                                 (${id},'${nick}','${account}','${password}','${bgImg}','${picUrl}','','','','','false')`
         await mysqlRequest(sql)
-        let selectUser = `select * from user where id = ${id}`
+        let selectUser = `select id,login,nick,phoneNumber,email,bgImg,picUrl,signature,address,sex,age from user where id = ${id}`
         const user = await mysqlRequest(selectUser)
         data = {
             data:{
                 user: user[0],
-                friends: [user[0]]
+                friends: [{
+                    id: user[0].id,
+                    nick: user[0].nick,
+                    picUrl: user[0].picUrl
+                }]
             },
             code: 200
         }
@@ -52,12 +56,16 @@ router.post('/', async function(req, res, next) {
         sql = `insert into user (id,nick,email,password,bgImg,picUrl,phoneNumber,signature,address,age,login) values 
                                 (${id},'${nick}','${account}','${password}','${bgImg}','${picUrl}','','','','','false')`
         await mysqlRequest(sql)
-        let selectUser = `select * from user where id = ${id}`
+        let selectUser = `select select id,login,nick,phoneNumber,email,bgImg,picUrl,signature,address,sex,age from user where id = ${id}`
         const user = await mysqlRequest(selectUser)
         data = {
             data:{
                 user: user[0],
-                friends: [user[0]]
+                friends: [{
+                    id: user[0].id,
+                    nick: user[0].nick,
+                    picUrl: user[0].picUrl
+                }]
             },
             code: 200
         }
@@ -84,9 +92,12 @@ router.post('/', async function(req, res, next) {
   })
 // 注册时候创建对应好友列表
   const arr = []
-  arr[0] = data.data.user
-  const arrStr = JSON.stringify(arr)
-  sql = `insert into friends (id,list) values (${id},'${arrStr}')`
+  arr[0] = {
+      id: data.data.user.id,
+      nick: data.data.user.nick,
+      picUrl: data.data.user.picUrl
+  }
+  sql = `insert into friends (id,list) values (${id},'${JSON.stringify(arr)}')`
   await mysqlRequest(sql)
 // 创建 创建的群组占位
   sql = `insert into creategroup (id,list) values (${id},'')`
