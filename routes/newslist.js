@@ -19,5 +19,11 @@ router.get('/', async function(req, res, next) {
   }
   res.send(dataObj)
 });
+router.post('/', async function(req,res){
+  const {id,list} = req.body
+  const sql = `update newslist set list = '${list}' where id = ${id}`
+  await mysqlRequest(sql)
+  res.send('数据已读')
+})
 
 module.exports = router;

@@ -39,15 +39,15 @@ const oneToOne = async (socket,data,users) =>{
     }
     // 如果好友在线，则好友进行同步接受
     if(users[fuser.id]){
-        // 消息列表界面，实现右侧小圆点
-        socket.to(users[fuser.id].id).emit('receiveNewsList',{...user,msg:typeMsg,type,time})
         // 聊天界面实现通讯
         socket.to(users[fuser.id].id).emit('receiveOneChat', {fid:fuser.id,time,type,msg});
+        // 消息列表界面，实现右侧小圆点
+        socket.to(users[fuser.id].id).emit('receiveNewsList',{...user,msg:typeMsg,type,time,flag: true})
     }
-    // 用户接受消息
+    // 用户聊天界面消息
     socket.emit('receiveOneChat', {uid: user.id,time,type,msg});
-    // 向自己推送消息列表
-    socket.emit('receiveNewsList',{...fuser,msg:typeMsg,type,time})
+    // 用户自己 消息列表界面，用户自己发的消息没有小圆点
+    socket.emit('receiveNewsList',{...fuser,msg:typeMsg,type,time,flag: false})
     // 聊天信息数据入库
     let sql
     sql = `insert into userchat values (${user.id},${fuser.id},${time},${type},'${msg}')`
@@ -55,12 +55,12 @@ const oneToOne = async (socket,data,users) =>{
     // 消息列表信息入库
     sql = `select list from newslist where id = ${user.id}`
     uResult = await mysqlRequest(sql)
-    const uarray = JSON.stringify(arraylist(uResult,fuser,time,msg))
+    const uarray = JSON.stringify(arraylist(uResult,fuser,time,msg,true))
     sql = `update newslist set list = '${uarray}' where id = ${user.id}` 
     await mysqlRequest(sql)
     sql = `select list from newslist where id = ${fuser.id}`
     fResult = await mysqlRequest(sql)
-    const farray = JSON.stringify(arraylist(fResult,user,time,msg))
+    const farray = JSON.stringify(arraylist(fResult,user,time,msg,false))
     sql = `update newslist set list = '${farray}' where id = ${fuser.id}`
     await mysqlRequest(sql)
 }
