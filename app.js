@@ -27,6 +27,8 @@ const groupRouter = require('./routes/group')
 const changeinfoRouter = require('./routes/changeinfo')
 // 聊天记录
 const chatRouter = require('./routes/chat')
+// 消息列表
+const newslistRouter = require('./routes/newslist')
 
 var app = express();
 
@@ -62,6 +64,8 @@ app.use('/group',groupRouter)
 app.use('/changeinfo',changeinfoRouter)
 // 聊天记录
 app.use('/chat',chatRouter)
+// 消息列表
+app.use('/newslist',newslistRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

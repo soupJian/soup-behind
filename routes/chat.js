@@ -24,7 +24,6 @@ router.get('/', async function(req, res, next) {
           }
       }
   })
-  console.log(arr)
   res.send(arr)
 });
 

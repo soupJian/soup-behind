@@ -102,12 +102,18 @@ router.post('/', async function(req, res, next) {
       nick: data.data.user.nick,
       picUrl: data.data.user.picUrl
   }
+  const list = []
+  const liststr = JSON.stringify(list)
   sql = `insert into friends (id,list) values (${id},'${JSON.stringify(arr)}')`
   await mysqlRequest(sql)
-// 创建 创建的群组占位
-  sql = `insert into creategroup (id,list) values (${id},'')`
+  // 创建 创建的群组占位
+  sql = `insert into creategroup (id,list) values (${id},'${liststr}')`
   await mysqlRequest(sql)
-  sql = `insert into addgroup (id,list) values (${id},'')`
+  // 用户加入的群组占位
+  sql = `insert into addgroup (id,list) values (${id},'${liststr}')`
+  await mysqlRequest(sql)
+  // 消息列表
+  sql = `insert into newslist (id,list) values (${id},'${liststr}')`
   await mysqlRequest(sql)
   res.send(JSON.parse(JSON.stringify(data)))
 });

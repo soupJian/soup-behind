@@ -5,7 +5,8 @@ const  options = {
   port: '3306',
   user: 'root',
   password: 'root',
-  database: 'study'
+  database: 'study',
+  charset: 'UTF8MB4_GENERAL_CI'
 }
 // 创建与数据库的连接对象
 var connection = mysql.createConnection(options)
@@ -22,7 +23,7 @@ connection.connect((err)=>{
 
 const mysqlRequest = (sql) =>{
   return new Promise((resolve,reject)=>{
-    // console.log(sql)
+    console.log(sql)
     connection.query(sql,(err,result)=>{
       if(err){
         reject(err)
