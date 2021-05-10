@@ -3,7 +3,7 @@ var router = express.Router();
 const mysqlRequest = require('../util/mysql')
 
 /* GET users listing. */
-router.get('/', async function(req, res, next) {
+router.get('/user', async function(req, res, next) {
   const {uid,fid} = req.query
   const sql = `select * from userchat where (uid = ${uid} && fid = ${fid}) or (uid = ${fid} && fid = ${uid})`
   const list = await mysqlRequest(sql)
@@ -13,6 +13,21 @@ router.get('/', async function(req, res, next) {
         time:item.time,
         type: item.type,
         msg: item.msg
+      }
+  })
+  res.send(arr)
+});
+router.get('/group', async function(req, res, next) {
+  const {id} = req.query
+  const sql = `select * from groupchat where id = ${id}`
+  const list = await mysqlRequest(sql)
+  const arr = list.map(item=>{
+      return {
+        id, // user/group id
+        time: item.time, // 消息时间
+        type: item.type, // 消息类型
+        msg: item.msg, // 消息
+        groupMsg: item.groupMsg // 是否为群发的消息 0 是 1 不是
       }
   })
   res.send(arr)

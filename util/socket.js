@@ -41,15 +41,15 @@ const oneToOne = async (socket,data,users) =>{
     }
     // 如果好友在线，则好友进行同步接受
     if(users[fuser.id]){
-        // 聊天界面实现通讯
-        socket.to(users[fuser.id].id).emit('receiveOneChat', {id:user.id,time,type,msg});
-        // 消息列表界面，实现右侧小圆点
-        socket.to(users[fuser.id].id).emit('receiveNewsList',{...user,msg:typeMsg,type,time,flag: true})
+        // 聊天界面实现通讯 // type为消息类型 0 用户 1 群聊
+        socket.to(users[fuser.id].id).emit('receiveChat', {id:user.id,time,type,msg}); 
+        // 消息列表界面，实现右侧小圆点 
+        socket.to(users[fuser.id].id).emit('receiveNewsList',{...user,msg:typeMsg,type: 0,time,flag: true})
     }
-    // 用户聊天界面消息
-    socket.emit('receiveOneChat', {id: user.id,time,type,msg});
-    // 用户自己 消息列表界面，用户自己发的消息没有小圆点
-    socket.emit('receiveNewsList',{...fuser,msg:typeMsg,type,time,flag: false})
+    // 用户聊天界面消息 // type为消息类型
+    socket.emit('receiveChat', {id: user.id,time,type,msg});
+    // 用户自己 消息列表界面，用户自己发的消息没有小圆点 // type为群/用户
+    socket.emit('receiveNewsList',{...fuser,msg:typeMsg,type: 0,time,flag: false})
     // 聊天信息数据入库
     let sql
     sql = `insert into userchat values (${user.id},${fuser.id},${time},${type},'${msg}')`
@@ -68,17 +68,17 @@ const oneToOne = async (socket,data,users) =>{
 }
 // 群聊天
 const groupChat = async (socket,data) =>{
-    const {user,group,type,msg} = data
+    const {user,group,type,msg,groupMsg} = data
     const time = Date.now()
     let typeMsg = msg
     // 图片类型
     if(type == 1){ 
         imgMsg = "[图片]"
     }
-    socket.emit('receiveNewsList',{...group,msg:typeMsg,type,time,flag: true})
+    socket.emit('receiveNewsList',{...group,msg:typeMsg,type:1,time,flag: true})
     // 聊天信息数据入库
     let sql
-    sql = `insert into groupchat values (${group.id},${group.id},${time},'${msg}',${type})`
+    sql = `insert into groupchat values (${group.id},${group.id},${time},'${msg}',${type},${groupMsg})`
     await mysqlRequest(sql)
     // 消息列表信息入库
     sql = `select list from newslist where id = ${user.id}`
@@ -86,9 +86,4 @@ const groupChat = async (socket,data) =>{
     const uarray = JSON.stringify(arraylist(uResult,group,time,msg,false,1))
     sql = `update newslist set list = '${uarray}' where id = ${user.id}` 
     await mysqlRequest(sql)
-    // sql = `select list from newslist where id = ${fuser.id}`
-    // fResult = await mysqlRequest(sql)
-    // const farray = JSON.stringify(arraylist(fResult,user,time,msg,false))
-    // sql = `update newslist set list = '${farray}' where id = ${fuser.id}`
-    // await mysqlRequest(sql)
 }

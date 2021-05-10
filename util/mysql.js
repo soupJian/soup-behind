@@ -23,7 +23,7 @@ connection.connect((err)=>{
 
 const mysqlRequest = (sql) =>{
   return new Promise((resolve,reject)=>{
-    console.log(sql)
+    // console.log(sql)
     connection.query(sql,(err,result)=>{
       if(err){
         reject(err)

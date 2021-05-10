@@ -15,9 +15,9 @@ router.post('/create', async function(req, res, next) {
   const id = Date.now()
   // 创建文件夹位置
   // 图片地址
-  const userPath = `public/group/${user.id}` // 用户 id
-  const groupPath = `public/group/${user.id}/${id}`  // 群聊 id 时间戳
-  const defaultPath = `public/group/${user.id}/${id}/${nick}` // 存放群聊 logo
+  const userPath = `public/group` // 用户 id
+  const groupPath = `public/group/${id}`  // 群聊 id 时间戳
+  const defaultPath = `public/group/${id}/-----soupCoover======` // 存放群聊 logo
   // 创建一个用户文件夹
   if(!fs.existsSync(userPath)){
     fs.mkdir(userPath,(err)=>{
@@ -43,7 +43,7 @@ router.post('/create', async function(req, res, next) {
     })
   }
   // 保存图片
-  const imgPath = `public/group/${user.id}/${id}/${nick}/-----soupCoover======.jpg`
+  const imgPath = `public/group/${id}/-----soupCoover======/picUrl.jpg`
   fs.writeFile(imgPath,dataBuffer,(err) => {
       if(err) {
           console.log(err)
@@ -52,7 +52,7 @@ router.post('/create', async function(req, res, next) {
       }
   })
   // 网络图片地址
-  const picUrl = `http://175.24.116.96:3100/group/${user.id}/${id}/${nick}/-----soupCoover======.jpg`
+  const picUrl = `http://175.24.116.96:3100/group/${id}/-----soupCoover======/picUrl.jpg`
 
   let sql
   // 数据入库 所有群
