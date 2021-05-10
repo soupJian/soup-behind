@@ -42,7 +42,7 @@ const oneToOne = async (socket,data,users) =>{
     // 如果好友在线，则好友进行同步接受
     if(users[fuser.id]){
         // 聊天界面实现通讯
-        socket.to(users[fuser.id].id).emit('receiveOneChat', {id:fuser.id,time,type,msg});
+        socket.to(users[fuser.id].id).emit('receiveOneChat', {id:user.id,time,type,msg});
         // 消息列表界面，实现右侧小圆点
         socket.to(users[fuser.id].id).emit('receiveNewsList',{...user,msg:typeMsg,type,time,flag: true})
     }
@@ -57,12 +57,12 @@ const oneToOne = async (socket,data,users) =>{
     // 消息列表信息入库
     sql = `select list from newslist where id = ${user.id}`
     uResult = await mysqlRequest(sql)
-    const uarray = JSON.stringify(arraylist(uResult,fuser,time,msg,true))
+    const uarray = JSON.stringify(arraylist(uResult,fuser,time,msg,0))
     sql = `update newslist set list = '${uarray}' where id = ${user.id}` 
     await mysqlRequest(sql)
     sql = `select list from newslist where id = ${fuser.id}`
     fResult = await mysqlRequest(sql)
-    const farray = JSON.stringify(arraylist(fResult,user,time,msg,false))
+    const farray = JSON.stringify(arraylist(fResult,user,time,msg,false,0))
     sql = `update newslist set list = '${farray}' where id = ${fuser.id}`
     await mysqlRequest(sql)
 }
@@ -83,7 +83,7 @@ const groupChat = async (socket,data) =>{
     // 消息列表信息入库
     sql = `select list from newslist where id = ${user.id}`
     uResult = await mysqlRequest(sql)
-    const uarray = JSON.stringify(arraylist(uResult,group,time,msg,false))
+    const uarray = JSON.stringify(arraylist(uResult,group,time,msg,false,1))
     sql = `update newslist set list = '${uarray}' where id = ${user.id}` 
     await mysqlRequest(sql)
     // sql = `select list from newslist where id = ${fuser.id}`

@@ -3,7 +3,7 @@
 // msg消息列表，
 // obj => user/fuser/group,
 // flag true/user  false/fuser
-const arraylist = (result,obj,time,msg,flag)=>{
+const arraylist = (result,obj,time,msg,flag,type)=>{
     let arr = []
     if(result.length > 0 && result[0].list){
         arr = JSON.parse(result[0].list)
@@ -23,6 +23,7 @@ const arraylist = (result,obj,time,msg,flag)=>{
         time,
         bradge: flag ? 0 : bradge,
         msg,
+        type // 0表示一对一 ，1 表示 群聊
     })
   return arr
 }
