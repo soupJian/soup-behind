@@ -96,7 +96,6 @@ router.post('/', async function(req, res, next) {
   })
 // 注册时候创建对应好友列表
   const arr = []
-  console.log(data)
   arr[0] = {
       id: data.data.user.id,
       nick: data.data.user.nick,

@@ -10,9 +10,9 @@ router.post('/', async function(req, res, next) {
   // 第二步 判断接受账号类型
   const {nameType,msg} = checkType(name)
   // 第三步 判断输入账号是否为已注册账号
-  let checkLoginSql = `select ${nameType} from user where ${nameType} = '${nameType}'`
+  let checkLoginSql = `select ${nameType} from user where ${nameType} = '${name}'`
   const checkLoginResult = await mysqlRequest(checkLoginSql)
-  if(checkLoginResult.length != 0){
+  if(checkLoginResult.length == 0){
     const data = {
       data:{
           msg: '账号暂未注册，请先注册'
@@ -38,8 +38,8 @@ router.post('/', async function(req, res, next) {
         data:{
             user: user[0],
             friends: JSON.parse(friend[0].list),
-            addgroup: addgroup[0].list,
-            creategroup: creategroup[0].list,
+            addgroup: JSON.parse(addgroup[0].list),
+            creategroup: JSON.parse(creategroup[0].list),
         },
         code: 200
     }

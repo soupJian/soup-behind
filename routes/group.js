@@ -68,20 +68,21 @@ router.post('/create', async function(req, res, next) {
   await mysqlRequest(sql)
   // 用户创建的多个群
   sql = `select list from creategroup where id = ${user.id}`
-  const grouplist = await mysqlRequest(sql)
-  grouplist.list.push({
+  let grouplist = await mysqlRequest(sql)
+  grouplist = JSON.parse(grouplist[0].list)
+  grouplist.push({
     "id": id,
     "nick": nick,
     "picUrl": picUrl,
     "description": description
   })
-  const json = JSON.stringify(grouplist.list)
-  sql = `update creategroup set list = ${json} where id = ${user.id}  )`
+  const json = JSON.stringify(grouplist)
+  sql = `update creategroup set list = '${json}' where id = ${user.id}`
   await mysqlRequest(sql)
   sql = `select list from creategroup where id = ${user.id}`
   const result = await mysqlRequest(sql)
   const data = {
-    creategroup: result,
+    creategroup: JSON.parse(result[0].list),
     msg: `群聊${nick}创建成功`,
     code: 200
   }

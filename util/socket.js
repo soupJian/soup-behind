@@ -16,7 +16,9 @@ module.exports = (io)=>{
         })
         // 一对一聊天
         socket.on('postOneChat', data =>{ oneToOne(socket,data,users )});
-        // 用户上线
+        // 多人聊天
+        socket.on('postGroupChat',data=>{ groupChat(socket,data,users) })
+        // 用户下线
         socket.on('outline',async(id)=>{
             // 用户登陆
             let updateSql = `update user set login = 'false' where id = ${id}`
@@ -40,12 +42,12 @@ const oneToOne = async (socket,data,users) =>{
     // 如果好友在线，则好友进行同步接受
     if(users[fuser.id]){
         // 聊天界面实现通讯
-        socket.to(users[fuser.id].id).emit('receiveOneChat', {fid:fuser.id,time,type,msg});
+        socket.to(users[fuser.id].id).emit('receiveOneChat', {id:fuser.id,time,type,msg});
         // 消息列表界面，实现右侧小圆点
         socket.to(users[fuser.id].id).emit('receiveNewsList',{...user,msg:typeMsg,type,time,flag: true})
     }
     // 用户聊天界面消息
-    socket.emit('receiveOneChat', {uid: user.id,time,type,msg});
+    socket.emit('receiveOneChat', {id: user.id,time,type,msg});
     // 用户自己 消息列表界面，用户自己发的消息没有小圆点
     socket.emit('receiveNewsList',{...fuser,msg:typeMsg,type,time,flag: false})
     // 聊天信息数据入库
@@ -63,4 +65,30 @@ const oneToOne = async (socket,data,users) =>{
     const farray = JSON.stringify(arraylist(fResult,user,time,msg,false))
     sql = `update newslist set list = '${farray}' where id = ${fuser.id}`
     await mysqlRequest(sql)
+}
+// 群聊天
+const groupChat = async (socket,data) =>{
+    const {user,group,type,msg} = data
+    const time = Date.now()
+    let typeMsg = msg
+    // 图片类型
+    if(type == 1){ 
+        imgMsg = "[图片]"
+    }
+    socket.emit('receiveNewsList',{...group,msg:typeMsg,type,time,flag: true})
+    // 聊天信息数据入库
+    let sql
+    sql = `insert into groupchat values (${group.id},${group.id},${time},${msg}',${type})`
+    await mysqlRequest(sql)
+    // 消息列表信息入库
+    sql = `select list from newslist where id = ${user.id}`
+    uResult = await mysqlRequest(sql)
+    const uarray = JSON.stringify(arraylist(uResult,group,time,msg,false))
+    sql = `update newslist set list = '${uarray}' where id = ${user.id}` 
+    await mysqlRequest(sql)
+    // sql = `select list from newslist where id = ${fuser.id}`
+    // fResult = await mysqlRequest(sql)
+    // const farray = JSON.stringify(arraylist(fResult,user,time,msg,false))
+    // sql = `update newslist set list = '${farray}' where id = ${fuser.id}`
+    // await mysqlRequest(sql)
 }

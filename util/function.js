@@ -1,7 +1,7 @@
 // result 数据库查询结果，
 // time执行使劲按，
 // msg消息列表，
-// obj => user/fuser ,
+// obj => user/fuser/group,
 // flag true/user  false/fuser
 const arraylist = (result,obj,time,msg,flag)=>{
     let arr = []

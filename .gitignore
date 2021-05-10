@@ -2,6 +2,8 @@ DS_Store
 node_modules
 /dist
 /public
+/public/user
+/public/group
 
 
 # local env files

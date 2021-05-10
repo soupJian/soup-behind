@@ -5,9 +5,9 @@ const mysqlRequest = require('../util/mysql')
 /* GET users listing. */
 router.post('/', async function(req, res, next) {
   const {nick} = req.body
-  const sql = `select id from user where nick = '${nick}'`
+  const sql = `select nick from user where nick = '${nick}'`
   const result = await mysqlRequest(sql)
-  if(result.length > 0){
+  if(result.length > 0 && result[0].nick == nick){
       res.send({
           data:{
               msg: '该昵称已被占用'
