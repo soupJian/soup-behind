@@ -57,7 +57,7 @@ const oneToOne = async (socket,data,users) =>{
     // 消息列表信息入库
     sql = `select list from newslist where id = ${user.id}`
     uResult = await mysqlRequest(sql)
-    const uarray = JSON.stringify(arraylist(uResult,fuser,time,msg,0))
+    const uarray = JSON.stringify(arraylist(uResult,fuser,time,msg,true,0))
     sql = `update newslist set list = '${uarray}' where id = ${user.id}` 
     await mysqlRequest(sql)
     sql = `select list from newslist where id = ${fuser.id}`
@@ -78,7 +78,7 @@ const groupChat = async (socket,data) =>{
     socket.emit('receiveNewsList',{...group,msg:typeMsg,type,time,flag: true})
     // 聊天信息数据入库
     let sql
-    sql = `insert into groupchat values (${group.id},${group.id},${time},${msg}',${type})`
+    sql = `insert into groupchat values (${group.id},${group.id},${time},'${msg}',${type})`
     await mysqlRequest(sql)
     // 消息列表信息入库
     sql = `select list from newslist where id = ${user.id}`

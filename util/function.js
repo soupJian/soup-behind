@@ -21,7 +21,7 @@ const arraylist = (result,obj,time,msg,flag,type)=>{
         nick: obj.nick,
         picUrl: obj.picUrl,
         time,
-        bradge: flag ? 0 : bradge,
+        bradge: flag ? 0: bradge,
         msg,
         type // 0表示一对一 ，1 表示 群聊
     })
