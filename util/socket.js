@@ -14,6 +14,8 @@ module.exports = (io)=>{
                 login: true
             }
         })
+        // 群 socket
+        socket.on('group',data=>{ socket.join(data) })
         // 一对一聊天
         socket.on('postOneChat', data =>{ oneToOne(socket,data,users )});
         // 多人聊天
@@ -67,18 +69,28 @@ const oneToOne = async (socket,data,users) =>{
     await mysqlRequest(sql)
 }
 // 群聊天
-const groupChat = async (socket,data) =>{
+const groupChat = async (socket,data,users) =>{
     const {user,group,type,msg,groupMsg} = data
+    // 创建房间
     const time = Date.now()
     let typeMsg = msg
     // 图片类型
     if(type == 1){ 
         imgMsg = "[图片]"
     }
-    socket.emit('receiveNewsList',{...group,msg:typeMsg,type:1,time,flag: true})
+    socket.to(group.id).emit("receiveNewsList",{...group,msg:typeMsg,type:1,time,flag: true})
+    socket.emit('receiveNewsList',{...group,msg:typeMsg,type:1,time,flag: false})
+    // 此方法除发送者不可接受
+    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg})
+    // 向发送者发消息
+    socket.emit("receiveChat",{id:user.id,time,type,msg})
     // 聊天信息数据入库
     let sql
-    sql = `insert into groupchat values (${group.id},${group.id},${time},'${msg}',${type},${groupMsg})`
+    if(groupMsg == 0){
+        sql = `insert into groupchat values (${group.id},${group.id},${time},'${msg}',${type},${groupMsg})`
+    }else{
+        sql = `insert into groupchat values (${group.id},${user.id},${time},'${msg}',${type},${groupMsg})`
+    }
     await mysqlRequest(sql)
     // 消息列表信息入库
     sql = `select list from newslist where id = ${user.id}`

@@ -23,7 +23,7 @@ router.get('/group', async function(req, res, next) {
   const list = await mysqlRequest(sql)
   const arr = list.map(item=>{
       return {
-        id, // user/group id
+        id: item.uid,// user/group id
         time: item.time, // 消息时间
         type: item.type, // 消息类型
         msg: item.msg, // 消息
