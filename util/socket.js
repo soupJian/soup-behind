@@ -19,7 +19,7 @@ module.exports = (io)=>{
         // 一对一聊天
         socket.on('postOneChat', data =>{ oneToOne(socket,data,users )});
         // 多人聊天
-        socket.on('postGroupChat',data=>{ groupChat(socket,data,users) })
+        socket.on('postGroupChat',data=>{ groupChat(socket,data) })
         // 用户下线
         socket.on('outline',async(id)=>{
             // 用户登陆
@@ -69,7 +69,7 @@ const oneToOne = async (socket,data,users) =>{
     await mysqlRequest(sql)
 }
 // 群聊天
-const groupChat = async (socket,data,users) =>{
+const groupChat = async (socket,data) =>{
     const {user,group,type,msg,groupMsg} = data
     // 创建房间
     const time = Date.now()

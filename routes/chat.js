@@ -27,6 +27,7 @@ router.get('/group', async function(req, res, next) {
         time: item.time, // 消息时间
         type: item.type, // 消息类型
         msg: item.msg, // 消息
+        nick: item.nick,
         groupMsg: item.groupMsg // 是否为群发的消息 0 是 1 不是
       }
   })

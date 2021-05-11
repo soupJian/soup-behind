@@ -62,7 +62,8 @@ router.post('/create', async function(req, res, next) {
   const list = JSON.stringify([{
     "id":user.id,
     "nick": user.nick,
-    "picUrl": user.picUrl
+    "picUrl": user.picUrl,
+    "nickStr": user.nick // 群别名
   }])
   sql = `insert into grouplist (id,list) values (${id},'${list}')`
   await mysqlRequest(sql)
@@ -88,5 +89,24 @@ router.post('/create', async function(req, res, next) {
   }
   res.send(data)
 });
+router.post('/add',async function(req, res, next){
+  const {user,group} = req.body
+  let sql = `select list from addgroup where id = ${user.id}`
+  const result = await mysqlRequest(sql)
+  const addgroup = JSON.parse(result[0].list)
+  addgroup.push(group)
+  // 加入自己的列表
+  sql = `update addgroup set list = '${JSON.stringify(addgroup)}' where id = ${user.id}`
+  await mysqlRequest(sql)
+  // 群聊列表中加入
+  sql = `select list from grouplist where id = ${group.id}`
+  const list = await mysqlRequest(sql)
+  const grouplist = JSON.parse(list[0].list)
+  grouplist.push({
+    ...user,
+    nickStr: user.nick // 别名
+  })
+  res.send(addgroup)
+})
 
 module.exports = router;
