@@ -23,7 +23,9 @@ router.post('/', async function(req,res){
   const {id,list} = req.body
   const sql = `update newslist set list = '${list}' where id = ${id}`
   await mysqlRequest(sql)
-  res.send('数据已读')
+  res.send({
+    code:200
+  })
 })
 
 module.exports = router;

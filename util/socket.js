@@ -92,10 +92,4 @@ const groupChat = async (socket,data) =>{
         sql = `insert into groupchat values (${group.id},${user.id},${time},'${msg}',${type},${groupMsg})`
     }
     await mysqlRequest(sql)
-    // 消息列表信息入库
-    sql = `select list from newslist where id = ${user.id}`
-    uResult = await mysqlRequest(sql)
-    const uarray = JSON.stringify(arraylist(uResult,group,time,msg,false,1))
-    sql = `update newslist set list = '${uarray}' where id = ${user.id}` 
-    await mysqlRequest(sql)
 }
