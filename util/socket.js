@@ -10,8 +10,7 @@ module.exports = (io)=>{
             let updateSql = `update user set login = 'true' where id = ${id}`
             await mysqlRequest(updateSql)
             users[id] = {
-                id: socket.id,
-                login: true
+                id: socket.id
             }
         })
         // 群 socket
@@ -27,9 +26,15 @@ module.exports = (io)=>{
             await mysqlRequest(updateSql)
             users[id] = null
         })
+        // 用户断开socket链接
+        socket.on('disconnect',()=>{
+            for(key in users){
+                if(users[key].id == socket.id){
+                    user[key] = null
+                }
+            }
+        })
     })
-    // 用户关掉连接，下线了
-    io.sockets.on("disconnecting",()=>{})
 }
 
 // 一对一聊天
@@ -81,9 +86,9 @@ const groupChat = async (socket,data) =>{
     socket.to(group.id).emit("receiveNewsList",{...group,msg:typeMsg,type:1,time,flag: true})
     socket.emit('receiveNewsList',{...group,msg:typeMsg,type:1,time,flag: false})
     // 此方法除发送者不可接受
-    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg})
+    socket.to(group.id).emit("receiveGroupChat",{id:user.id,time,type,msg})
     // 向发送者发消息
-    socket.emit("receiveChat",{id:user.id,time,type,msg})
+    socket.emit("receiveGroupChat",{id:user.id,time,type,msg})
     // 聊天信息数据入库
     let sql
     if(groupMsg == 0){
