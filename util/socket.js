@@ -29,8 +29,8 @@ module.exports = (io)=>{
         // 用户断开socket链接
         socket.on('disconnect',()=>{
             for(key in users){
-                if(users[key].id == socket.id){
-                    user[key] = null
+                if(users[key] && users[key].id == socket.id){
+                    users[key] = null
                 }
             }
         })
@@ -86,9 +86,9 @@ const groupChat = async (socket,data) =>{
     socket.to(group.id).emit("receiveNewsList",{...group,msg:typeMsg,type:1,time,flag: true})
     socket.emit('receiveNewsList',{...group,msg:typeMsg,type:1,time,flag: false})
     // 此方法除发送者不可接受
-    socket.to(group.id).emit("receiveGroupChat",{id:user.id,time,type,msg})
+    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg})
     // 向发送者发消息
-    socket.emit("receiveGroupChat",{id:user.id,time,type,msg})
+    socket.emit("receiveChat",{id:user.id,time,type,msg})
     // 聊天信息数据入库
     let sql
     if(groupMsg == 0){
