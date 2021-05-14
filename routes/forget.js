@@ -33,6 +33,32 @@ router.post('/', async function(req, res, next) {
   res.send(JSON.parse(JSON.stringify(data)))
 });
 
+router.post('/pwd', async function(req, res, next) {
+  // 第一步 接收数据
+  const {id,oldPassword,password} = req.body
+  // 第二步 获取信息
+  let sql = `select * from user where id = ${id}`
+  const user = await mysqlRequest(sql)
+  if(oldPassword != user[0].password ){
+    res.send({
+      msg: '旧密码输入错误'
+    })
+    return
+  }
+  if(oldPassword == password){
+    res.send({
+      msg: '新旧密码相同'
+    })
+    return
+  }
+  sql = `update user set password = '${password}' where id = '${id}'`
+  await mysqlRequest(sql)
+  res.send({
+    msg: '密码修改成功',
+    code: 200
+  })
+});
+
 function checkType(name){
   if(phoneReg.test(name)){
     return {
