@@ -75,7 +75,7 @@ const oneToOne = async (socket,data,users) =>{
 }
 // 群聊天
 const groupChat = async (socket,data) =>{
-    const {user,group,type,msg,groupMsg} = data
+    const {user,group,type,msg,groupMsg,nick} = data
     // 创建房间
     const time = Date.now()
     let typeMsg = msg
@@ -86,15 +86,15 @@ const groupChat = async (socket,data) =>{
     socket.to(group.id).emit("receiveNewsList",{...group,msg:typeMsg,type:1,time,flag: true})
     socket.emit('receiveNewsList',{...group,msg:typeMsg,type:1,time,flag: false})
     // 此方法除发送者不可接受
-    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg,groupMsg})
+    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg,groupMsg,nick})
     // 向发送者发消息
-    socket.emit("receiveChat",{id:user.id,time,type,msg,groupMsg})
+    socket.emit("receiveChat",{id:user.id,time,type,msg,groupMsg,nick})
     // 聊天信息数据入库
     let sql
     if(groupMsg == 0){
-        sql = `insert into groupchat values (${group.id},${group.id},${time},'${msg}',${type},${groupMsg})`
+        sql = `insert into groupchat values (${group.id},${group.id},${time},'${msg}',${type},${groupMsg},'${nick}')`
     }else{
-        sql = `insert into groupchat values (${group.id},${user.id},${time},'${msg}',${type},${groupMsg})`
+        sql = `insert into groupchat values (${group.id},${user.id},${time},'${msg}',${type},${groupMsg},'${nick}')`
     }
     await mysqlRequest(sql)
 }
