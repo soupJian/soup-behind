@@ -29,6 +29,8 @@ const changeinfoRouter = require('./routes/changeinfo')
 const chatRouter = require('./routes/chat')
 // 消息列表
 const newslistRouter = require('./routes/newslist')
+//上传图片
+const uploadRouter = require('./routes/upload')
 
 var app = express();
 
@@ -66,6 +68,8 @@ app.use('/changeinfo',changeinfoRouter)
 app.use('/chat',chatRouter)
 // 消息列表
 app.use('/newslist',newslistRouter)
+// 上传图片
+app.use('/upload',uploadRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

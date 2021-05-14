@@ -74,6 +74,7 @@ router.post('/create', async function(req, res, next) {
   grouplist.push({
     "id": id,
     "nick": nick,
+    "nickSr": nick,
     "picUrl": picUrl,
     "description": description
   })
@@ -106,7 +107,26 @@ router.post('/add',async function(req, res, next){
     ...user,
     nickStr: user.nick // 别名
   })
+  sql = `update grouplist set list = '${JSON.stringify(grouplist)}' where id = ${group.id}`
+  await mysqlRequest(sql)
   res.send(addgroup)
+})
+router.get('/detail',async function(req, res, next){
+  const {id} = req.query
+  // 加入自己的列表
+  sql = `select list from grouplist where id = ${id}`
+  const list = await mysqlRequest(sql)
+  // 群成员
+  const grouplist = JSON.parse(list[0].list)
+  // 群信息
+  sql = `select * from usergroup where id = ${id}`
+  const group = await mysqlRequest(sql)
+  res.send({
+    data:{
+      grouplist,
+      group: group[0]
+    }
+  })
 })
 
 module.exports = router;

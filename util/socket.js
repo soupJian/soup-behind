@@ -44,7 +44,7 @@ const oneToOne = async (socket,data,users) =>{
     let typeMsg = msg
     // 图片类型
     if(type == 1){ 
-        imgMsg = "[图片]"
+        typeMsg = "[图片]"
     }
     // 如果好友在线，则好友进行同步接受
     if(users[fuser.id]){
@@ -81,14 +81,14 @@ const groupChat = async (socket,data) =>{
     let typeMsg = msg
     // 图片类型
     if(type == 1){ 
-        imgMsg = "[图片]"
+        typeMsg = "[图片]"
     }
     socket.to(group.id).emit("receiveNewsList",{...group,msg:typeMsg,type:1,time,flag: true})
     socket.emit('receiveNewsList',{...group,msg:typeMsg,type:1,time,flag: false})
     // 此方法除发送者不可接受
-    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg})
+    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg,groupMsg})
     // 向发送者发消息
-    socket.emit("receiveChat",{id:user.id,time,type,msg})
+    socket.emit("receiveChat",{id:user.id,time,type,msg,groupMsg})
     // 聊天信息数据入库
     let sql
     if(groupMsg == 0){
