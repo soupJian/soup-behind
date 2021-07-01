@@ -15,7 +15,10 @@ var connection = mysql.createConnection(options)
 connection.connect((err)=>{
   // 如果建立失败
   if(err){
-    console.log("数据库连接失败");
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+      // 解决mysql长时间没有访问导致断掉链接，这里使它重新连接
+      connection.connect()
+    }
   }else{
     console.log("连接数据库成功");
   }
