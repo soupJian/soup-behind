@@ -10,19 +10,22 @@ const  options = {
 }
 // 创建与数据库的连接对象
 var connection = mysql.createConnection(options)
-
-// 建立连接
-connection.connect((err)=>{
-  // 如果建立失败
-  if(err){
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-      // 解决mysql长时间没有访问导致断掉链接，这里使它重新连接
-      connection.connect()
+const handleConnect = () =>{
+  // 建立连接
+  connection.connect((err)=>{
+    // 如果建立失败
+    if(err){
+      if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+        // 解决mysql长时间没有访问导致断掉链接，这里使它重新连接
+        handleConnect()
+      }
+    }else{
+      console.log("连接数据库成功");
     }
-  }else{
-    console.log("连接数据库成功");
-  }
-})
+  })
+}
+
+handleConnect()
 
 const mysqlRequest = (sql) =>{
   return new Promise((resolve,reject)=>{

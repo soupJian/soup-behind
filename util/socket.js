@@ -64,12 +64,12 @@ const oneToOne = async (socket,data,users) =>{
     // 消息列表信息入库
     sql = `select list from newslist where id = ${user.id}`
     uResult = await mysqlRequest(sql)
-    const uarray = JSON.stringify(arraylist(uResult,fuser,time,msg,true,0))
+    const uarray = JSON.stringify(arraylist(uResult,fuser,time,typeMsg,true,0))
     sql = `update newslist set list = '${uarray}' where id = ${user.id}` 
     await mysqlRequest(sql)
     sql = `select list from newslist where id = ${fuser.id}`
     fResult = await mysqlRequest(sql)
-    const farray = JSON.stringify(arraylist(fResult,user,time,msg,false,0))
+    const farray = JSON.stringify(arraylist(fResult,user,time,typeMsg,false,0))
     sql = `update newslist set list = '${farray}' where id = ${fuser.id}`
     await mysqlRequest(sql)
 }
@@ -86,9 +86,9 @@ const groupChat = async (socket,data) =>{
     socket.to(group.id).emit("receiveNewsList",{...group,msg:typeMsg,type:1,time,flag: true})
     socket.emit('receiveNewsList',{...group,msg:typeMsg,type:1,time,flag: false})
     // 此方法除发送者不可接受
-    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg,groupMsg,nick})
+    socket.to(group.id).emit("receiveChat",{id:user.id,time,type,msg:typeMsg,groupMsg,nick})
     // 向发送者发消息
-    socket.emit("receiveChat",{id:user.id,time,type,msg,groupMsg,nick})
+    socket.emit("receiveChat",{id:user.id,time,type,msg:typeMsg,groupMsg,nick})
     // 聊天信息数据入库
     let sql
     if(groupMsg == 0){
