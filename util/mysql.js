@@ -22,7 +22,7 @@ const handleConnect = () =>{
   })
   connection.on('error', function(err) {
     if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-        handleDisconnection();
+      handleConnect();
     } else {
         throw err;
     }
