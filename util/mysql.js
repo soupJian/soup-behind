@@ -47,6 +47,4 @@ const mysqlRequest = (sql) =>{
   })
 }
 
-module.exports = {
-  mysqlRequest
-};
+module.exports = mysqlRequest
